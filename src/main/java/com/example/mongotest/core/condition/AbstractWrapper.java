@@ -11,6 +11,10 @@ import java.util.function.BiPredicate;
 /**
  * @author alex
  * @date 2021-10-26 10:38
+ * @param <T> entity
+ * @param <R> column type, java.lang.String/Reference Type
+ * @param <Children> impl
+ * TODO: maybe another param need => executor type
  */
 @Slf4j
 public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, R, Children>> implements Compare<Children, R> {
