@@ -6,8 +6,6 @@ import lombok.experimental.Accessors;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.io.Serializable;
-
 /**
  * @author alex
  * @date 2021-10-21 12:12

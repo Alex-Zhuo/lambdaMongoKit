@@ -4,18 +4,18 @@ package com.example.mongotest.exception;
  * @author alex
  * @date 2021-10-25 15:26
  */
-public class MongoPlusException  extends RuntimeException {
+public class IMongoException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
-    public MongoPlusException(String message) {
+    public IMongoException(String message) {
         super(message);
     }
 
-    public MongoPlusException(Throwable throwable) {
+    public IMongoException(Throwable throwable) {
         super(throwable);
     }
 
-    public MongoPlusException(String message, Throwable throwable) {
+    public IMongoException(String message, Throwable throwable) {
         super(message, throwable);
     }
 }
