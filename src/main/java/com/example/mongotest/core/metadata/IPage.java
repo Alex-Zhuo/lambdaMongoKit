@@ -1,4 +1,4 @@
-package com.example.mongotest.core.condition.metadata;
+package com.example.mongotest.core.metadata;
 
 /**
  * @author alex

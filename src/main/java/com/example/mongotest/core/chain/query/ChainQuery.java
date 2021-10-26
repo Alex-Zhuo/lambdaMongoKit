@@ -1,16 +1,15 @@
-package com.example.mongotest.core.condition.query;
+package com.example.mongotest.core.chain.query;
 
-import com.example.mongotest.core.condition.Wrapper;
-import com.example.mongotest.core.condition.metadata.IPage;
+import com.example.mongotest.core.chain.ChainWrapper;
+import com.example.mongotest.core.metadata.IPage;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author alex
  * @date 2021-10-26 10:36
  */
-public interface Query<T> extends Wrapper<T> {
+public interface ChainQuery<T> extends ChainWrapper<T> {
 
     /*default T findById(){
         return null;

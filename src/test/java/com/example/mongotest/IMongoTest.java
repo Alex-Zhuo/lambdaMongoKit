@@ -1,6 +1,8 @@
 package com.example.mongotest;
 
+import com.example.mongotest.core.toolkit.ColumnUtils;
 import com.example.mongotest.core.toolkit.MongoServices;
+import com.example.mongotest.entity.GEO;
 import com.example.mongotest.entity.GooglePoiQueryLog;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -18,12 +20,17 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class IMongoTest {
 
     @Test
-    public void testQuery(){
-        MongoServices.query(GooglePoiQueryLog.class).eq("","");
+    public void testQuery() {
+        MongoServices.query(GooglePoiQueryLog.class).eq("", "");
     }
 
     @Test
-    public void testLambdaQuery(){
-        MongoServices.lambdaQuery(GooglePoiQueryLog.class).eq(GooglePoiQueryLog::getGid,2).list();
+    public void testLambdaQuery() {
+        MongoServices.lambdaQuery(GooglePoiQueryLog.class).eq(GooglePoiQueryLog::getGid, 2).list();
+    }
+
+    @Test
+    public void columnTest() {
+        GooglePoiQueryLog queryLog = new GooglePoiQueryLog().setGeo(new GEO("1", "2"));
     }
 }

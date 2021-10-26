@@ -1,14 +1,12 @@
-package com.example.mongotest.core.condition.update;
+package com.example.mongotest.core.chain.update;
 
-import com.example.mongotest.core.condition.Wrapper;
-
-import java.io.Serializable;
+import com.example.mongotest.core.chain.ChainWrapper;
 
 /**
  * @author alex
  * @date 2021-10-26 10:37
  */
-public interface Update<T> extends Wrapper<T> {
+public interface ChainUpdate<T> extends ChainWrapper<T> {
 
     default boolean update(T entity) {
         /*return SqlHelper.retBool(this.getBaseMapper().update(entity, this.getWrapper()));*/

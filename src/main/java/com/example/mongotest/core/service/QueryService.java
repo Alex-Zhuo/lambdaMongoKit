@@ -1,6 +1,6 @@
 package com.example.mongotest.core.service;
 
-import com.example.mongotest.core.condition.metadata.IPage;
+import com.example.mongotest.core.metadata.IPage;
 
 import java.io.Serializable;
 import java.util.Collection;

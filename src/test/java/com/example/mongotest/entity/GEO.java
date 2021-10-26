@@ -1,30 +1,22 @@
 package com.example.mongotest.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * @author alex
- * @date 2021-10-21 12:12
+ * @date 2021-10-26 17:20
  */
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor
 @Document
-public class GooglePoiQueryLog {
+@AllArgsConstructor
+public class GEO {
 
-    private ObjectId id;
-
-    private String gid;
-
-    private String name;
-
-    private String type;
-
-    private String latlng;
-
-    private GEO geo;
+    private String latitude;
+    private String lang;
 }
