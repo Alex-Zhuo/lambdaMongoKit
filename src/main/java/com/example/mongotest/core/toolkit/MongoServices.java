@@ -10,12 +10,20 @@ public final class MongoServices {
     private MongoServices() {
     }
 
+    public static <T> QueryChainWrapper<T> query(String collectionName, Class<T> clazz) {
+        return new QueryChainWrapper<>(collectionName, clazz);
+    }
+
     public static <T> QueryChainWrapper<T> query(Class<T> clazz) {
-        return new QueryChainWrapper<>(clazz);
+        return query(null, clazz);
+    }
+
+    public static <T> LambdaQueryChainWrapper<T> lambdaQuery(String collectionName, Class<T> clazz) {
+        return new LambdaQueryChainWrapper<>(collectionName, clazz);
     }
 
     public static <T> LambdaQueryChainWrapper<T> lambdaQuery(Class<T> clazz) {
-        return new LambdaQueryChainWrapper<>(clazz);
+        return lambdaQuery(null, clazz);
     }
 
     /*public static <T> QueryWrapper<T> query(String collectionName) {

@@ -2,37 +2,42 @@ package com.example.mongotest.core.chain;
 
 import com.example.mongotest.core.condition.AbstractWrapper;
 import com.example.mongotest.core.condition.Compare;
+import com.example.mongotest.core.constant.RegexConstant;
+import com.example.mongotest.core.enums.MethodKeyword;
+import com.example.mongotest.reflection.CriteriaUtil;
+import com.example.mongotest.util.PatternUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
+import java.util.Collection;
 import java.util.Objects;
-import java.util.function.BiPredicate;
+import java.util.regex.Pattern;
 
 /**
  * @param <T>        entity
  * @param <R>        column type, java.lang.String/Reference Type
  * @param <Children> impl
- * @param <Param>    Param ,表示子类所包装的具体 Wrapper 类型
  * @author alex
  * @date 2021-10-26 10:38
  */
 @Slf4j
-public abstract class AbstractChainWrapper<T, R, Children extends AbstractChainWrapper<T, R, Children, Param>, Param extends AbstractWrapper<T, R, Param>> implements Compare<Children, R> {
+public abstract class AbstractChainWrapper<T, R, Children extends AbstractChainWrapper<T, R, Children>> implements Compare<Children, R> {
+
     protected final Children typedThis = (Children) this;
     protected T entity;
     protected Class<T> entityClass;
     protected String collectionName;
-    /**
-     * 子类所包装的具体 Wrapper 类型
-     */
-    protected Param wrapperChildren;
+
+    protected Query query;
 
     public AbstractChainWrapper() {
     }
 
-    public AbstractChainWrapper(Class<T> entityClass) {
+    public AbstractChainWrapper(String collectionName, Class<T> entityClass) {
         this.entityClass = entityClass;
         String className = entityClass.getSimpleName();
         try {
@@ -41,145 +46,146 @@ public abstract class AbstractChainWrapper<T, R, Children extends AbstractChainW
             log.error("cannot create instance through reflection, class name:{}", className);
             e.printStackTrace();
         }
-        String collectionName = null;
         Document document = entityClass.getAnnotation(Document.class);
-        if (Objects.nonNull(document) && document.collection().length() > 0) {
+        if (StringUtils.isEmpty(collectionName) && Objects.nonNull(document) && document.collection().length() > 0) {
             collectionName = document.collection();
         }
-        this.collectionName = Objects.nonNull(collectionName) && collectionName.length() > 0 ? collectionName : className;
-    }
-
-    public AbstractWrapper<T, R, Param> getWrapper() {
-        return this.wrapperChildren;
-    }
-
-    @Override
-    public <V> Children allEq(boolean condition, Map<R, V> params, boolean null2IsNull) {
-        /*this.getWrapper().allEq(condition, params, null2IsNull);*/
-        return this.typedThis;
-    }
-
-    @Override
-    public <V> Children allEq(boolean condition, BiPredicate<R, V> filter, Map<R, V> params, boolean null2IsNull) {
-        /*this.getWrapper().allEq(condition, filter, params, null2IsNull);*/
-        return this.typedThis;
+        this.collectionName = StringUtils.isNotEmpty(collectionName) ? collectionName : className;
+        this.query = new Query();
     }
 
     @Override
     public Children eq(boolean condition, R column, Object val) {
-        /*this.getWrapper().eq(condition, column, val);*/
-        return this.typedThis;
+        return this.doIt(condition, MethodKeyword.EQ, column, val, val.getClass());
     }
 
     @Override
     public Children ne(boolean condition, R column, Object val) {
-        /*this.getWrapper().ne(condition, column, val);*/
-        return this.typedThis;
+        return this.doIt(condition, MethodKeyword.NE, column, val, val.getClass());
     }
 
     @Override
     public Children gt(boolean condition, R column, Object val) {
-        /*this.getWrapper().gt(condition, column, val);*/
-        return this.typedThis;
+        return this.doIt(condition, MethodKeyword.GT, column, val, val.getClass());
     }
 
     @Override
     public Children ge(boolean condition, R column, Object val) {
-        /*this.getWrapper().ge(condition, column, val);*/
-        return this.typedThis;
+        return this.doIt(condition, MethodKeyword.GE, column, val, val.getClass());
     }
 
     @Override
     public Children lt(boolean condition, R column, Object val) {
-        /*this.getWrapper().lt(condition, column, val);*/
-        return this.typedThis;
+        return this.doIt(condition, MethodKeyword.LT, column, val, val.getClass());
     }
 
     @Override
     public Children le(boolean condition, R column, Object val) {
-        /*this.getWrapper().le(condition, column, val);*/
-        return this.typedThis;
+        return this.doIt(condition, MethodKeyword.LE, column, val, val.getClass());
     }
 
-    @Override
+    /*@Override
     public Children between(boolean condition, R column, Object val1, Object val2) {
-        /*this.getWrapper().between(condition, column, val1, val2);*/
-        return this.typedThis;
+        this.le(condition,column,);
+        
     }
 
     @Override
     public Children notBetween(boolean condition, R column, Object val1, Object val2) {
-        /*this.getWrapper().notBetween(condition, column, val1, val2);*/
-        return this.typedThis;
+        this.getWrapper().notBetween(condition, column, val1, val2);
+        
+    }*/
+
+    @Override
+    public Children like(boolean condition, R column, String val) {
+        return this.doIt(condition, MethodKeyword.REGEX, column, PatternUtil.getPattern(val, RegexConstant.FUZZY_MATCH), Pattern.class);
     }
 
     @Override
-    public Children like(boolean condition, R column, Object val) {
-        /*this.getWrapper().like(condition, column, val);*/
-        return this.typedThis;
+    public Children notLike(boolean condition, R column, String val) {
+        return this.doIt(condition, MethodKeyword.REGEX, column, PatternUtil.getPattern(val, RegexConstant.NOT_MATCH), Pattern.class);
     }
 
     @Override
-    public Children notLike(boolean condition, R column, Object val) {
-        /*this.getWrapper().notLike(condition, column, val);*/
-        return this.typedThis;
+    public Children likeLeft(boolean condition, R column, String val) {
+        return this.doIt(condition, MethodKeyword.REGEX, column, PatternUtil.getPattern(val, RegexConstant.LEFT_MATCH), Pattern.class);
     }
 
     @Override
-    public Children likeLeft(boolean condition, R column, Object val) {
-        /*this.getWrapper().likeLeft(condition, column, val);*/
-        return this.typedThis;
+    public Children likeRight(boolean condition, R column, String val) {
+        return this.doIt(condition, MethodKeyword.REGEX, column, PatternUtil.getPattern(val, RegexConstant.RIGHT_MATCH), Pattern.class);
     }
 
     @Override
-    public Children likeRight(boolean condition, R column, Object val) {
-        /*this.getWrapper().likeRight(condition, column, val);*/
+    public Children regex(boolean condition, R column, String regex) {
+        return this.doIt(condition, MethodKeyword.REGEX, column, PatternUtil.getPattern(regex), Pattern.class);
+    }
+
+    @Override
+    public Children in(boolean condition, R column, Collection<?> values) {
+        return this.doIt(condition, MethodKeyword.IN, column, values, values.getClass());
+    }
+
+    @Override
+    public Children notIn(boolean condition, R column, Collection<?> values) {
+        return this.doIt(condition, MethodKeyword.NOT_IN, column, values, values.getClass());
+    }
+
+    protected String columnToString(R column) {
+        return (String) column;
+    }
+
+    protected Children doIt(boolean condition, MethodKeyword methodKeyword, R column, Object methodParam, Class<?> methodParamType) {
+        if (condition) {
+            Criteria criteria = CriteriaUtil.invoke(methodKeyword.getMethod(), this.columnToString(column), methodParam, methodParamType);
+            this.query.addCriteria(criteria);
+        }
         return this.typedThis;
     }
 /*
     public Children isNull(boolean condition, R column) {
         this.getWrapper().isNull(condition, column);
-        return this.typedThis;
+        
     }
 
     public Children isNotNull(boolean condition, R column) {
         this.getWrapper().isNotNull(condition, column);
-        return this.typedThis;
+        
     }
 
     public Children in(boolean condition, R column, Collection<?> coll) {
         this.getWrapper().in(condition, column, coll);
-        return this.typedThis;
+        
     }
 
     public Children notIn(boolean condition, R column, Collection<?> coll) {
         this.getWrapper().notIn(condition, column, coll);
-        return this.typedThis;
+        
     }
 
     public Children inSql(boolean condition, R column, String inValue) {
         this.getWrapper().inSql(condition, column, inValue);
-        return this.typedThis;
+        
     }
 
     public Children notInSql(boolean condition, R column, String inValue) {
         this.getWrapper().notInSql(condition, column, inValue);
-        return this.typedThis;
+        
     }
 
     public Children groupBy(boolean condition, R... columns) {
         this.getWrapper().groupBy(condition, columns);
-        return this.typedThis;
+        
     }
 
     public Children orderBy(boolean condition, boolean isAsc, R... columns) {
         this.getWrapper().orderBy(condition, isAsc, columns);
-        return this.typedThis;
+        
     }
 
     public Children having(boolean condition, String sqlHaving, Object... params) {
         this.getWrapper().having(condition, sqlHaving, params);
-        return this.typedThis;
+        
     }
 
     public Children func(boolean condition, Consumer<Children> consumer) {
@@ -187,61 +193,61 @@ public abstract class AbstractChainWrapper<T, R, Children extends AbstractChainW
             consumer.accept(this.typedThis);
         }
 
-        return this.typedThis;
+        
     }
 
     public Children or(boolean condition) {
         this.getWrapper().or(condition);
-        return this.typedThis;
+        
     }
 
     public Children apply(boolean condition, String applySql, Object... value) {
         this.getWrapper().apply(condition, applySql, value);
-        return this.typedThis;
+        
     }
 
     public Children last(boolean condition, String lastSql) {
         this.getWrapper().last(condition, lastSql);
-        return this.typedThis;
+        
     }
 
     public Children comment(boolean condition, String comment) {
         this.getWrapper().comment(condition, comment);
-        return this.typedThis;
+        
     }
 
     public Children first(boolean condition, String firstSql) {
         this.getWrapper().first(condition, firstSql);
-        return this.typedThis;
+        
     }
 
     public Children exists(boolean condition, String existsSql) {
         this.getWrapper().exists(condition, existsSql);
-        return this.typedThis;
+        
     }
 
     public Children notExists(boolean condition, String existsSql) {
         this.getWrapper().notExists(condition, existsSql);
-        return this.typedThis;
+        
     }
 
     public Children and(boolean condition, Consumer<Param> consumer) {
         this.getWrapper().and(condition, consumer);
-        return this.typedThis;
+        
     }
 
     public Children or(boolean condition, Consumer<Param> consumer) {
         this.getWrapper().or(condition, consumer);
-        return this.typedThis;
+        
     }
 
     public Children nested(boolean condition, Consumer<Param> consumer) {
         this.getWrapper().nested(condition, consumer);
-        return this.typedThis;
+        
     }
 
     public Children not(boolean condition, Consumer<Param> consumer) {
         this.getWrapper().not(condition, consumer);
-        return this.typedThis;
+        
     }*/
 }

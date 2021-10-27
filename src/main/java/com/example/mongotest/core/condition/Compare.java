@@ -1,32 +1,12 @@
 package com.example.mongotest.core.condition;
 
 import java.io.Serializable;
-import java.util.Map;
-import java.util.function.BiPredicate;
+import java.util.Collection;
 
 /**
  * @author alex
  */
 public interface Compare<Children, R> extends Serializable {
-    default <V> Children allEq(Map<R, V> params) {
-        return this.allEq(params, true);
-    }
-
-    default <V> Children allEq(Map<R, V> params, boolean null2IsNull) {
-        return this.allEq(true, params, null2IsNull);
-    }
-
-    <V> Children allEq(boolean condition, Map<R, V> params, boolean null2IsNull);
-
-    default <V> Children allEq(BiPredicate<R, V> filter, Map<R, V> params) {
-        return this.allEq(filter, params, true);
-    }
-
-    default <V> Children allEq(BiPredicate<R, V> filter, Map<R, V> params, boolean null2IsNull) {
-        return this.allEq(true, filter, params, null2IsNull);
-    }
-
-    <V> Children allEq(boolean condition, BiPredicate<R, V> filter, Map<R, V> params, boolean null2IsNull);
 
     default Children eq(R column, Object val) {
         return this.eq(true, column, val);
@@ -64,7 +44,7 @@ public interface Compare<Children, R> extends Serializable {
 
     Children le(boolean condition, R column, Object val);
 
-    default Children between(R column, Object val1, Object val2) {
+    /*default Children between(R column, Object val1, Object val2) {
         return this.between(true, column, val1, val2);
     }
 
@@ -74,29 +54,47 @@ public interface Compare<Children, R> extends Serializable {
         return this.notBetween(true, column, val1, val2);
     }
 
-    Children notBetween(boolean condition, R column, Object val1, Object val2);
+    Children notBetween(boolean condition, R column, Object val1, Object val2);*/
 
-    default Children like(R column, Object val) {
+    default Children like(R column, String val) {
         return this.like(true, column, val);
     }
 
-    Children like(boolean condition, R column, Object val);
+    Children like(boolean condition, R column, String val);
 
-    default Children notLike(R column, Object val) {
+    default Children notLike(R column, String val) {
         return this.notLike(true, column, val);
     }
 
-    Children notLike(boolean condition, R column, Object val);
+    Children notLike(boolean condition, R column, String val);
 
-    default Children likeLeft(R column, Object val) {
+    default Children likeLeft(R column, String val) {
         return this.likeLeft(true, column, val);
     }
 
-    Children likeLeft(boolean condition, R column, Object val);
+    Children likeLeft(boolean condition, R column, String val);
 
-    default Children likeRight(R column, Object val) {
+    default Children likeRight(R column, String val) {
         return this.likeRight(true, column, val);
     }
 
-    Children likeRight(boolean condition, R column, Object val);
+    Children likeRight(boolean condition, R column, String val);
+
+    default Children regex(R column, String regex) {
+        return this.regex(true, column, regex);
+    }
+
+    Children regex(boolean condition, R column, String regex);
+
+    default Children in(R column, Collection<?> values) {
+        return this.in(true, column, values);
+    }
+
+    Children in(boolean condition, R column, Collection<?> values);
+
+    default Children notIn(R column, Collection<?> values) {
+        return this.notIn(true, column, values);
+    }
+
+    Children notIn(boolean condition, R column, Collection<?> values);
 }

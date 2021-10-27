@@ -1,5 +1,6 @@
 package com.example.mongotest.core.chain.query;
 
+import com.example.mongotest.core.chain.AbstractChainWrapper;
 import com.example.mongotest.core.chain.ChainWrapper;
 import com.example.mongotest.core.metadata.IPage;
 
@@ -15,12 +16,12 @@ public interface ChainQuery<T> extends ChainWrapper<T> {
         return null;
     }*/
 
-    default boolean exists(){
+    default boolean exists() {
         return Boolean.FALSE;
     }
 
 
-    default long count(){
+    default long count() {
         return 0L;
     }
 
