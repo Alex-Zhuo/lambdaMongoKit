@@ -5,6 +5,7 @@ import java.util.function.Function;
 
 /**
  * 使Function获取序列化能力
+ *
  * @author alex
  */
 @FunctionalInterface

@@ -25,7 +25,8 @@ public class IMongoTest {
 
     @Test
     public void testLambdaQuery() {
-        MongoServices.lambdaQuery(GooglePoiQueryLog.class).eq(GooglePoiQueryLog::getGid, 2).list();
+        Boolean exist = MongoServices.lambdaQuery(GooglePoiQueryLog.class).eq(GooglePoiQueryLog::getGid, 2).exists();
+        System.out.println(exist);
     }
 
     @Test

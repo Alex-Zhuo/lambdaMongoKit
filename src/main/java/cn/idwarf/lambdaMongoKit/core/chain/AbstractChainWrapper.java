@@ -1,8 +1,11 @@
 package cn.idwarf.lambdaMongoKit.core.chain;
 
+import cn.idwarf.lambdaMongoKit.core.chain.query.ChainQuery;
 import cn.idwarf.lambdaMongoKit.core.constant.RegexConstant;
+import cn.idwarf.lambdaMongoKit.core.executor.AbstractWrapper;
 import cn.idwarf.lambdaMongoKit.core.executor.Compare;
 import cn.idwarf.lambdaMongoKit.core.enums.MethodKeyword;
+import cn.idwarf.lambdaMongoKit.core.metadata.IPage;
 import cn.idwarf.lambdaMongoKit.reflection.CriteriaUtil;
 import cn.idwarf.lambdaMongoKit.util.PatternUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +16,7 @@ import org.springframework.data.mongodb.core.query.Query;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -20,21 +24,20 @@ import java.util.regex.Pattern;
  * @param <T>        entity
  * @param <R>        column type, java.lang.String/Reference Type
  * @param <Children> impl
+ * @param <Wrapper>  executor wrapper
  * @author alex
  * @date 2021-10-26 10:38
  */
 @Slf4j
-public abstract class AbstractChainWrapper<T, R, Children extends AbstractChainWrapper<T, R, Children>> implements Compare<Children, R> {
+public abstract class AbstractChainWrapper<T, R, Children extends AbstractChainWrapper<T, R, Children, Wrapper>, Wrapper extends AbstractWrapper<T, Wrapper>> implements Compare<Children, R>, ChainQuery<T, Wrapper> {
 
     protected final Children typedThis = (Children) this;
     protected T entity;
     protected Class<T> entityClass;
     protected String collectionName;
+    protected Wrapper wrapperChildren;
 
     protected Query query;
-
-    public AbstractChainWrapper() {
-    }
 
     public AbstractChainWrapper(String collectionName, Class<T> entityClass) {
         this.entityClass = entityClass;
@@ -54,8 +57,13 @@ public abstract class AbstractChainWrapper<T, R, Children extends AbstractChainW
     }
 
     @Override
+    public AbstractWrapper<T, Wrapper> getWrapper() {
+        return this.wrapperChildren.setCollectionName(this.collectionName).setQuery(this.query);
+    }
+
+    @Override
     public Children eq(boolean condition, R column, Object val) {
-        return this.doIt(condition, MethodKeyword.EQ, column, val, val.getClass());
+        return this.doIt(condition, MethodKeyword.EQ, column, val, Object.class);
     }
 
     @Override
@@ -141,7 +149,35 @@ public abstract class AbstractChainWrapper<T, R, Children extends AbstractChainW
         }
         return this.typedThis;
     }
-/*
+
+    @Override
+    public boolean exists() {
+        return this.getWrapper().exists();
+    }
+
+    @Override
+    public long count() {
+        return ChainQuery.super.count();
+    }
+
+    @Override
+    public List<T> list() {
+        return ChainQuery.super.list();
+    }
+
+    @Override
+    public T one() {
+        return ChainQuery.super.one();
+    }
+
+    @Override
+    public <E extends IPage<T>> E page(E page) {
+        return ChainQuery.super.page(page);
+    }
+
+
+
+    /*
     public Children isNull(boolean condition, R column) {
         this.getWrapper().isNull(condition, column);
         
@@ -211,7 +247,7 @@ public abstract class AbstractChainWrapper<T, R, Children extends AbstractChainW
     }
 
     public Children comment(boolean condition, String comment) {
-        this.getWrapper().comment(condition, comment);
+       this.getWrapper().comment(condition, comment);
         
     }
 

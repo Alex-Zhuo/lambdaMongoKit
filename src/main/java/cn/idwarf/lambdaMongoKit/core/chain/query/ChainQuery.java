@@ -1,7 +1,9 @@
 package cn.idwarf.lambdaMongoKit.core.chain.query;
 
 import cn.idwarf.lambdaMongoKit.core.chain.ChainWrapper;
+import cn.idwarf.lambdaMongoKit.core.executor.AbstractWrapper;
 import cn.idwarf.lambdaMongoKit.core.metadata.IPage;
+import org.springframework.data.mongodb.core.query.Query;
 
 import java.util.List;
 
@@ -9,13 +11,14 @@ import java.util.List;
  * @author alex
  * @date 2021-10-26 10:36
  */
-public interface ChainQuery<T> extends ChainWrapper<T> {
+public interface ChainQuery<T, Wrapper extends AbstractWrapper<T, Wrapper>> extends ChainWrapper<T, Wrapper> {
 
     /*default T findById(){
         return null;
     }*/
 
     default boolean exists() {
+        //this.getWrapper().get
         return Boolean.FALSE;
     }
 

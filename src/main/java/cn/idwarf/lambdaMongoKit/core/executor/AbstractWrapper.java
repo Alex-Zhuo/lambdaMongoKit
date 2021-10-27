@@ -1,153 +1,118 @@
 package cn.idwarf.lambdaMongoKit.core.executor;
 
+import cn.idwarf.lambdaMongoKit.core.metadata.IPage;
+import com.mongodb.Block;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoCollection;
+import org.bson.Document;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.Collection;
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author alex
  * @date 2021-10-26 18:00
  */
-public class AbstractWrapper<T, R, Children extends AbstractWrapper<T, R, Children>> implements Compare<Children, R> {
+@Component
+public class AbstractWrapper<T, Children extends AbstractWrapper<T, Children>> {
 
-    public static final String COMMA = ",";
-
-    protected Query query;
+    protected final Children typedThis = (Children) this;
     private T entity;
     private Class<T> entityClass;
-    protected final Children typedThis = (Children) this;
+    protected String collectionName;
+    protected Query query;
+    public MongoTemplate mongoTemplate;
+    @Autowired
+    private MongoClient mongoClient;
 
     public AbstractWrapper() {
     }
 
-    public Query getQuery() {
-        return this.query;
-    }
-
     public T getEntity() {
-        return this.entity;
+        return entity;
     }
 
     public Children setEntity(T entity) {
         this.entity = entity;
-        return this.typedThis;
+        return typedThis;
     }
 
-    protected Class<T> getEntityClass() {
-        if (this.entityClass == null && this.entity != null) {
-            this.entityClass = (Class<T>) this.entity.getClass();
-        }
+    public Query getQuery() {
+        return query;
+    }
 
-        return this.entityClass;
+    public Children setQuery(Query query) {
+        this.query = query;
+        return typedThis;
+    }
+
+    public String getCollectionName() {
+        return collectionName;
+    }
+
+    public Children setCollectionName(String collectionName) {
+        this.collectionName = collectionName;
+        return typedThis;
+    }
+
+    public Class<T> getEntityClass() {
+        if (entityClass == null && entity != null) {
+            entityClass = (Class<T>) entity.getClass();
+        }
+        return entityClass;
     }
 
     public Children setEntityClass(Class<T> entityClass) {
         if (entityClass != null) {
             this.entityClass = entityClass;
         }
-
-        return this.typedThis;
+        return typedThis;
     }
 
-    @Override
-    public Children eq(boolean condition, R column, Object val) {
+    public MongoCollection<Document> getCollection() {
+        return mongoClient.getDatabase(collectionName).getCollection(collectionName);
+    }
+
+    public boolean exists() {
+        Block<Document> block = new Block<Document>() {
+
+            @Override
+            public void apply(Document document) {
+                /*document = iding(document);
+                document = jointing(document, join);
+                list.add(toJSON(document));*/
+            }
+        };
+        return this.mongoTemplate.exists(query, collectionName);
+    }
+
+
+    public long count() {
+        return 0L;
+    }
+
+    public List<T> list() {
+        /*return this.getBaseMapper().selectList(this.getWrapper());*/
+        return this.mongoTemplate.findAllAndRemove(query, entityClass, collectionName);
+    }
+
+    public T one() {
+        /*return this.getBaseMapper().selectOne(this.getWrapper());*/
         return null;
     }
 
-    @Override
-    public Children ne(boolean condition, R column, Object val) {
+    public <E extends IPage<T>> E page(E page) {
+        /*return this.getBaseMapper().selectPage(page, this.getWrapper());*/
         return null;
     }
 
-    @Override
-    public Children gt(boolean condition, R column, Object val) {
-        return null;
-    }
+    public void update() {
 
-    @Override
-    public Children ge(boolean condition, R column, Object val) {
-        return null;
-    }
-
-    @Override
-    public Children lt(boolean condition, R column, Object val) {
-        return null;
-    }
-
-    @Override
-    public Children le(boolean condition, R column, Object val) {
-        return null;
-    }
-
-    /*@Override
-    public Children between(boolean condition, R column, Object val1, Object val2) {
-        return null;
-    }
-
-    @Override
-    public Children notBetween(boolean condition, R column, Object val1, Object val2) {
-        return null;
-    }*/
-
-    @Override
-    public Children like(boolean condition, R column, String val) {
-        return null;
-    }
-
-    @Override
-    public Children notLike(boolean condition, R column, String val) {
-        return null;
-    }
-
-    @Override
-    public Children likeLeft(boolean condition, R column, String val) {
-        return null;
-    }
-
-    @Override
-    public Children likeRight(boolean condition, R column, String val) {
-        return null;
-    }
-
-    @Override
-    public Children regex(boolean condition, R column, String regex) {
-        return null;
-    }
-
-    @Override
-    public Children in(boolean condition, R column, Collection<?> values) {
-        return null;
-    }
-
-    @Override
-    public Children notIn(boolean condition, R column, Collection<?> values) {
-        return null;
-    }
-
-    /**
-     * 获取 columnNames
-     */
-    @SafeVarargs
-    protected final String columnsToString(R... columns) {
-        return Arrays.stream(columns).map(this::columnToString).collect(Collectors.joining(COMMA));
-    }
-
-    /**
-     * 多字段转换为逗号 "," 分割字符串
-     *
-     * @param columns 多字段
-     */
-    protected String columnsToString(List<R> columns) {
-        return columns.stream().map(this::columnToString).collect(Collectors.joining(COMMA));
-    }
-
-    /**
-     * 获取 columnName
-     */
-    protected String columnToString(R column) {
-        return (String) column;
     }
 }

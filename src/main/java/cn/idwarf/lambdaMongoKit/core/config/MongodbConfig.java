@@ -4,10 +4,17 @@ import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoCredential;
 import com.mongodb.ReadPreference;
 import com.mongodb.ServerAddress;
+import com.mongodb.client.MongoClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.MongoDatabaseFactory;
+import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
 import org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper;
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 
@@ -18,8 +25,8 @@ import java.util.concurrent.TimeUnit;
 /**
  * mongo配置
  *
- *  @author alex
- *  @date 2021/10/26 10:09
+ * @author alex
+ * @date 2021/10/26 10:09
  */
 @Configuration
 @Slf4j
@@ -74,5 +81,12 @@ public class MongodbConfig extends AbstractMongoClientConfiguration {
                 )
                 .readPreference(ReadPreference.secondaryPreferred())
                 .build();
+    }
+
+    @Override
+    @Bean
+    @SuppressWarnings("NullableProblems")
+    public MongoClient mongoClient(){
+        return super.mongoClient();
     }
 }

@@ -17,7 +17,7 @@ import javax.validation.constraints.NotEmpty;
 @Data
 @Validated
 @Component
-@ConfigurationProperties(prefix = "klook.mongodb")
+@ConfigurationProperties(prefix = "spring.data.mongodb")
 public class MongoClientOptionProperties {
     /**
      * 基础连接参数
