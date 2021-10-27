@@ -1,7 +1,7 @@
-package com.example.mongotest.core.condition;
+package cn.idwarf.lambdaMongoKit.core.condition;
 
-import com.example.mongotest.core.toolkit.ColumnUtils;
-import com.example.mongotest.core.toolkit.support.SFunction;
+import cn.idwarf.lambdaMongoKit.core.toolkit.ColumnUtils;
+import cn.idwarf.lambdaMongoKit.core.toolkit.support.SFunction;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;

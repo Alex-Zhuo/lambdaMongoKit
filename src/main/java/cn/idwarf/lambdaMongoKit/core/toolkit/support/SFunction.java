@@ -1,4 +1,4 @@
-package com.example.mongotest.core.toolkit.support;
+package cn.idwarf.lambdaMongoKit.core.toolkit.support;
 
 import java.io.Serializable;
 import java.util.function.Function;

@@ -1,4 +1,4 @@
-package com.example.mongotest.exception;
+package cn.idwarf.lambdaMongoKit.exception;
 
 public final class ExceptionUtils {
     private ExceptionUtils() {

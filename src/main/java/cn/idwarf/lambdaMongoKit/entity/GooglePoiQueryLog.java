@@ -1,4 +1,4 @@
-package com.example.mongotest.entity;
+package cn.idwarf.lambdaMongoKit.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

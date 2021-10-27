@@ -1,4 +1,4 @@
-package com.example.mongotest.core.config;
+package cn.idwarf.lambdaMongoKit.core.config;
 
 import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoCredential;

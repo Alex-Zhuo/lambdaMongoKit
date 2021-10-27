@@ -1,4 +1,4 @@
-package com.example.mongotest.core.config;
+package cn.idwarf.lambdaMongoKit.core.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

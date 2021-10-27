@@ -3,7 +3,7 @@
 // (powered by FernFlower decompiler)
 //
 
-package com.example.mongotest.core.enums;
+package cn.idwarf.lambdaMongoKit.core.enums;
 
 
 /**

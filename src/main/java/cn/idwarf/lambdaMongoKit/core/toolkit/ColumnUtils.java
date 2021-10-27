@@ -1,6 +1,6 @@
-package com.example.mongotest.core.toolkit;
+package cn.idwarf.lambdaMongoKit.core.toolkit;
 
-import com.example.mongotest.core.toolkit.support.SFunction;
+import cn.idwarf.lambdaMongoKit.core.toolkit.support.SFunction;
 
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Field;

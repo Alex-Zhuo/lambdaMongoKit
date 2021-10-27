@@ -1,4 +1,4 @@
-package com.example.mongotest;
+package cn.idwarf.lambdaMongoKit;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,10 +8,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @date 2021/10/26 10:22
  */
 @SpringBootApplication
-public class IMongoApplication {
+public class LambdaMongoKitApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(IMongoApplication.class, args);
+        SpringApplication.run(LambdaMongoKitApplication.class, args);
     }
 
 }

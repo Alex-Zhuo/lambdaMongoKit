@@ -1,4 +1,4 @@
-package com.example.mongotest.exception;
+package cn.idwarf.lambdaMongoKit.exception;
 
 /**
  * @author alex

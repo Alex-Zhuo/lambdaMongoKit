@@ -1,4 +1,4 @@
-package com.example.mongotest.exception;
+package cn.idwarf.lambdaMongoKit.exception;
 
 public class ReflectionException extends RuntimeException {
     private static final long serialVersionUID = 7642570221267566591L;

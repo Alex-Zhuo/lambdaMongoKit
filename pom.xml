@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>mongoTest</artifactId>
+    <artifactId>lambdaMongoKit</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>mongoTest</name>
-    <description>mongoTest</description>
+    <name>lambdaMongoKit</name>
+    <description>lambdaMongoKit</description>
     <properties>
         <java.version>11</java.version>
     </properties>
