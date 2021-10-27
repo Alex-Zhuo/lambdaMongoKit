@@ -1,4 +1,4 @@
-package cn.idwarf.lambdaMongoKit.core.condition;
+package cn.idwarf.lambdaMongoKit.core.executor;
 
 import java.io.Serializable;
 import java.util.Collection;

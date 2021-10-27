@@ -1,4 +1,4 @@
-package cn.idwarf.lambdaMongoKit.core.condition;
+package cn.idwarf.lambdaMongoKit.core.executor;
 
 import cn.idwarf.lambdaMongoKit.core.toolkit.ColumnUtils;
 import cn.idwarf.lambdaMongoKit.core.toolkit.support.SFunction;

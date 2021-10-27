@@ -1,6 +1,6 @@
 package cn.idwarf.lambdaMongoKit.core;
 
-import cn.idwarf.lambdaMongoKit.core.condition.AbstractWrapper;
+import cn.idwarf.lambdaMongoKit.core.executor.AbstractWrapper;
 import cn.idwarf.lambdaMongoKit.core.toolkit.support.SFunction;
 
 /**

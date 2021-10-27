@@ -1,4 +1,4 @@
-package cn.idwarf.lambdaMongoKit.core.condition.query;
+package cn.idwarf.lambdaMongoKit.core.executor.query;
 
 import cn.idwarf.lambdaMongoKit.core.AbstractLambdaWrapper;
 

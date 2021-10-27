@@ -1,7 +1,7 @@
 package cn.idwarf.lambdaMongoKit.core.chain;
 
 import cn.idwarf.lambdaMongoKit.core.constant.RegexConstant;
-import cn.idwarf.lambdaMongoKit.core.condition.Compare;
+import cn.idwarf.lambdaMongoKit.core.executor.Compare;
 import cn.idwarf.lambdaMongoKit.core.enums.MethodKeyword;
 import cn.idwarf.lambdaMongoKit.reflection.CriteriaUtil;
 import cn.idwarf.lambdaMongoKit.util.PatternUtil;
